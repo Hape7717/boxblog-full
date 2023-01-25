@@ -16,6 +16,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="icon" type="image/jpg" href="img/logo/PNG/327316533_1188676491793928_5497790955519278487_n.jpg"/>
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="view-blog.css">
     <link rel="stylesheet" href="login.css">

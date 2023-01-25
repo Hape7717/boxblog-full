@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="aboutus.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/jpg" href="img/logo/PNG/327316533_1188676491793928_5497790955519278487_n.jpg"/>
     <title>About us</title>
 </head>
 <body class="bg-pan-left">
@@ -111,7 +112,10 @@
             </div>
             <div class="item-about">
                 <div class="txt-about">
-                    <p>เว็บไซต์นี้จัดขึ้นเพื่อเป็นโปรเจคจบของนักศึก แผนกวิชาคอมพิวเตอร์ ประเภทวิชาเทศโนโลยีสารสนเทศและการสื่อสาร สาขาวิชา เทคโนโลยีสารสนเทศ สาขางาน นักพัฒนาซอฟต์แวร์คอมพิวเตอร์</p>
+                    <p>
+                        เว็บไซต์นี้จัดขึ้นเพื่อเป็นโปรเจคจบของนักศึกษา แผนกวิชาคอมพิวเตอร์ ประเภทวิชาเทศโนโลยีสารสนเทศและการสื่อสาร<br>              
+                        สาขาวิชาเทคโนโลยีสารสนเทศ สาขางานนักพัฒนาซอฟต์แวร์คอมพิวเตอร์
+                    </p>
                     <p>โดยเหตุผลของการทำเว็บบทความนี้ หนึ่งในคณะผู้จัดทำมีความเห็นว่าอยากจะทำเว็บไซต์ที่สามารถแชร์ความรู้หรือสิ่งที่ผู้จัดทำสนใจในขณะนั้น นำมาโพสต์ ลงให้เว็บไซต์นี้ เพื่อให้คนที่ต้องการหาความรู้จากทางเว็บไซต์มีช่องเข้าถึงความรู้ได้ง่ายและสามารถใช้ได้ทุกที่</p>
                 </div>
             </div>
@@ -132,6 +136,7 @@
                 <div class="blog-meaning">
                     <h2>Blog</h2>
                     <p>เป็นคำรวมมาจากคำว่า เว็บล็อก (Weblog) เป็นรูปแบบเว็บไซต์ประเภทหนึ่ง ซึ่งถูกเขียนขึ้นในลำดับที่เรียงตามเวลาในการเขียน ซึ่งจะแสดงข้อมูลที่เขียนล่าสุดไว้แรกสุด บล็อกโดยปกติจะประกอบด้วย ข้อความ ภาพ ลิงก์ ซึ่งบางครั้งจะรวมสื่อต่าง ๆ ไม่ว่า เพลง หรือวิดีโอ</p>
+                    <p>ที่มา : <a href="https://th.wikipedia.org/wiki/บล็อก" style="color: aliceblue;">https://th.wikipedia.org/wiki/บล็อก</a></p>
                 </div>
             </div>
         </div>
@@ -141,11 +146,12 @@
         <div class="boxandblog" style="margin: 5% 0;">
             <div>
                 <h3 style="margin: 20px 0 ; color: #2F200A;">เบื้องหลังของเว็บ Box Blog</h3>
-                <li>PHP PDO (PHP DataObject)</li>
-                <li>HTML Hyper Text Markup </li>
+                <li>jQuery</li>
                 <li>JavaScript</li>
-                <li>Structured Query Language (SQL)</li>
+                <li>HTML Hyper Text Markup </li>
+                <li>PHP PDO (PHP DataObject)</li>
                 <li>Bootstrap Front-end framework</li>
+                <li>Structured Query Language (SQL)</li>
             </div>
             <div>
                 <div class="align-img">

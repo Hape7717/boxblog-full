@@ -39,6 +39,8 @@
     <!-- end sweetalert2 -->
 
     <title>Manage User</title>
+    <link rel="icon" type="image/jpg" href="img/logo/PNG/327316533_1188676491793928_5497790955519278487_n.jpg"/>
+
 </head>
 <body>
     <nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
