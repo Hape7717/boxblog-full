@@ -1,0 +1,27 @@
+
+.box-body {
+    display: flex;
+    justify-content: center;
+    border-radius: 50px;
+   
+}
+
+.grid-box-body {
+    margin:  10% 0;
+    border-radius: 10px;
+    background: linear-gradient(315deg, #c9b5a1, #efd7c0);
+    box-shadow:  -20px -20px 60px #beab98,
+             20px 20px 60px #ffe7ce;
+    padding: 50px;
+}
+
+
+.item-input-box {
+    display: grid;
+    grid-template-columns: repeat(2,1fr );
+    gap: 10px   ;
+}
+
+.form-inp {
+    margin-bottom: 10px;
+}
