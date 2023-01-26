@@ -127,7 +127,7 @@
 
 
     <div class="container">
-        <img class="img-header-blog" src="<?php echo $article['header_image'];?>" alt="" srcset="">
+        <img class="img-header-blog" src="<?php echo '../uploads/'.$article['header_image']; ?>" alt="" srcset="">
         <div class="detail-blog">
             <h3 class="title-detail-blog"><?php echo $article['title'];?></h3>
             <p class="read-blog">

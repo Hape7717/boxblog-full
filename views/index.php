@@ -111,7 +111,7 @@
           <!-- Recommended Blog 1-->
         <a href="views.php?view_id=<?php echo $article['id_article']; ?>" class="blog-grid-item-active">
           <div style="padding: 20px;">
-            <img src="<?php echo $article['header_image']; ?>" class="img-item-blog-lg" alt="">
+            <img src="<?php echo '../uploads/'.$article['header_image']; ?>" class="img-item-blog-lg" alt="">
             <div class="blog-grid-tag">
               <p href="" class="tag"><?php echo $article['categories']; ?></p>
             </div>
@@ -137,7 +137,7 @@
         <!-- Recommended Blog 2-->
 
         <a href="views.php?view_id=<?php echo $article2['id_article']; ?>" class="blog-grid-item" style="flex-direction: row;">
-          <img class="img-item-blog" src="<?php echo $article2['header_image']; ?>"  alt="">
+          <img class="img-item-blog" src="<?php echo '../uploads/'.$article2['header_image']; ?>"  alt="">
           <div class="allin-blog">
             <div class="blog-grid-tag">
               <p href="" class="tag"><?php echo $article2['categories']; ?></p>
@@ -185,7 +185,7 @@
         ?>  
 
     <a href="views.php?view_id=<?php echo $articleAll['id_article']; ?>" class="blog-grid-item" style="flex-direction: row;">
-        <img class="img-item-blog" src="<?php echo $articleAll['header_image']; ?>"  alt="">
+        <img class="img-item-blog" src="<?php echo '../uploads/'.$articleAll['header_image']; ?>"  alt="">
         <div style="width: 100%; margin-left: 20px; padding: 10px;">
           <div class="blog-grid-tag">
             <p href="" class="tag"><?php echo $articleAll['categories']; ?></p>
