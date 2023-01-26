@@ -9,10 +9,12 @@
 
     if (isset($_GET['delete'])) {
         $delete_id = $_GET['delete'];
+        $deletecomm = $conn->query("DELETE FROM article_comment WHERE id_article = $delete_id");
         $deletestmt = $conn->query("DELETE FROM article_tb WHERE id_article = $delete_id");
         $deletestmt->execute();
+        $deletecomm->execute();
         
-        if ($deletestmt) {
+        if ($deletestmt && $deletecomm) {
             echo "<script>alert('Data has been deleted successfully');</script>";
             $_SESSION['success'] = "Data has been deleted succesfully";
             header("refresh:1; url=index.php");

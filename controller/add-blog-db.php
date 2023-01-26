@@ -10,6 +10,7 @@ if (isset($_POST['insertcontent'])) {
     $title = $_POST['title'];
     $content = $_POST['content'];
     $description = $_POST['description'];
+    echo $username = $_SESSION['username'];
     
     date_default_timezone_set("Asia/Bangkok");
     $timestamp = date("Y-m-d H:i:s");
@@ -79,13 +80,14 @@ if (isset($_POST['insertcontent'])) {
 
 
             // insert the data into the database
-            $stmt = $conn->prepare("INSERT INTO article_tb (title,header_image,content,description,categories,time_stamp) VALUES (:title,:headerimage, :content, :description, :category ,:timestamp)");
+            $stmt = $conn->prepare("INSERT INTO article_tb (title,header_image,content,description,categories,time_stamp,username) VALUES (:title,:headerimage, :content, :description, :category ,:timestamp ,:username)");
             $stmt->bindParam(':title', $title);
             $stmt->bindParam(":headerimage", $newname);
             $stmt->bindParam(':content', $content);
             $stmt->bindParam(':description', $description);
             $stmt->bindParam(':category', $category);
             $stmt->bindParam(":timestamp", $timestamp);
+            $stmt->bindParam(":username", $username);
             $stmt->execute();
 
 

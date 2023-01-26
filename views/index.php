@@ -117,6 +117,7 @@
             </div>
             <p class="blog-grid-item-title" style="  white-space: nowrap; width: 600px; overflow: hidden; text-overflow: ellipsis; "><?php echo $article['title']; ?></p>
             <p class="blog-grid-item-Detail" style=" max-width: 200ch; white-space: nowrap; width: 600px; overflow: hidden; text-overflow: ellipsis;"><?php echo $article['description']; ?></p>
+            <p class="blog-grid-item-Detail post-by"></p>By : <?php echo $article['username']; ?></p>
           </div>
         </a>
         <hr class="line-gr">
@@ -124,7 +125,7 @@
 <?php
 }
 
-    $query = "SELECT *, COUNT(views) as count FROM article_tb GROUP BY views ORDER BY count ASC LIMIT 1,3";
+    $query = "SELECT *, COUNT(views) as count FROM article_tb GROUP BY views ORDER BY count ASC LIMIT 3";
 
 // Execute the query and fetch the results
   $stmt = $conn->prepare($query);
@@ -144,6 +145,7 @@
             </div>
             <p class="blog-grid-item-title-sm" style="  white-space: nowrap; width: 400px; overflow: hidden; text-overflow: ellipsis; "><?php echo $article2['title']; ?></p>
             <p class="blog-grid-item-Detail-sm" style="max-width: 200ch;"><?php echo $article2['description']; ?></p>
+            <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch;">By : <?php echo $article2['username']; ?></p>
           </div>
         </a>
         <hr class="line-gr">
@@ -191,7 +193,8 @@
             <p href="" class="tag"><?php echo $articleAll['categories']; ?></p>
           </div>
           <p class="blog-grid-item-title-sm" style="  white-space: nowrap; width: 400px; overflow: hidden; text-overflow: ellipsis; "><?php echo $articleAll['title']; ?></p>
-          <p class="blog-grid-item-Detail-sm"></p><?php echo $articleAll['description']; ?></p>
+          <p class="blog-grid-item-Detail-sm all-article"></p><?php echo $articleAll['description']; ?></p>
+          <p class="blog-grid-item-Detail-sm"></p>By : <?php echo $articleAll['username']; ?></p>
         </div>
       </a>
       <hr class="line-gr">

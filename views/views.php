@@ -166,11 +166,11 @@ if(!isset($_SESSION['username'])){
     <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="comment"></textarea>
     <label for="floatingTextarea">Comments</label>
     </div><br>
+    <button type="submit" name="comm" class="btn-diy">Post</button>
     ';
 }
 // end check session login can comment
 ?>
-                <button type="submit" name="comm" class="btn-diy">Post</button>
             </form>
             <hr class="under-line" id="comment_under">
 

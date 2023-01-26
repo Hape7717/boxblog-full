@@ -133,15 +133,15 @@
   </nav>
     
         <div class="header-blog" >
-            <p># Manage User</p>
+            <p># Edit blog</p>
             <h1>This page is for editing articles.</h1>
         </div>
         <div class="container-our-blog" id="all-blog">
-            <h2 style="font-size: 25px; color: #2F200A; font-weight: 700;">Manage User</h2>
+            <h2 style="font-size: 25px; color: #2F200A; font-weight: 700;">Edit blog</h2>
           
         </div>
         <?php
-        print_r([$id]) ;
+        // print_r([$id]) ;
             $stmt = $conn->prepare("SELECT * FROM article_tb WHERE id_article = ?");
             $stmt->execute([$id]);
             $article = $stmt->fetch(PDO::FETCH_ASSOC);
