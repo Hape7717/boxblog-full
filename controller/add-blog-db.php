@@ -10,7 +10,7 @@ if (isset($_POST['insertcontent'])) {
     $title = $_POST['title'];
     $content = $_POST['content'];
     $description = $_POST['description'];
-    echo $username = $_SESSION['username'];
+    $username = $_SESSION['username'];
     
     date_default_timezone_set("Asia/Bangkok");
     $timestamp = date("Y-m-d H:i:s");
@@ -40,7 +40,9 @@ if (isset($_POST['insertcontent'])) {
             //คัดลอกไฟล์ไปยังโฟลเดอร์
             move_uploaded_file($_FILES['img_file']['tmp_name'], $path_copy);
         }
-
+    }else{
+        
+    }
         // validation
         if (empty($category)) {
             $_SESSION['error'] = "Please select a category";
@@ -50,10 +52,6 @@ if (isset($_POST['insertcontent'])) {
             $_SESSION['error'] = "Please enter a title";
             header("location: ../views/add-blog.php");
         }
-        // if(empty($img)) {
-        //     $_SESSION['error'] = "Please upload a header image";
-        //     header("location: ../views/add-blog.php");
-        // }
         if (empty($content)) {
             $_SESSION['error'] = "Please enter a content";
             header("location: ../views/add-blog.php");
@@ -61,22 +59,6 @@ if (isset($_POST['insertcontent'])) {
 
         // check if there are any errors
         if (count($_SESSION['error']) == 0) {
-
-            // $upload = $_FILES['headerimage']['name'];
-
-            // if ($upload != '') {
-            //     $allow = array('jpg', 'jpeg', 'png');
-            //     $extension = explode(".", $img['name']);
-            //     $fileActExt = strtolower(end($extension));
-            //     $fileNew = rand() . "." . $fileActExt;
-            //     $filePath = "../uploads/".$fileNew;
-
-            //     if (in_array($fileActExt, $allow)) {
-            //         if ($img['size'] > 0 && $img['error'] == 0) {
-            //             move_uploaded_file($img['tmp_name'], $filePath);
-            //         }
-            //     }
-            // } 
 
 
             // insert the data into the database
@@ -100,6 +82,6 @@ if (isset($_POST['insertcontent'])) {
                 echo $error . "<br>";
             }
         }
-    }
+    
 }    
 ?>

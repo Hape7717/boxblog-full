@@ -4,27 +4,51 @@
     include_once('../config/db.php');
 
     if(isset($views_id['id'])){
-        try {
+        try {            
+            
+            // select data from views_id
             $id = $views_id['id'];
             $select_stmt = $conn->prepare('SELECT * FROM article_tb WHERE id_article = :id');
             $select_stmt->execute([$id]);
             $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
             extract($row);
+
         } catch(PDOException $e) {
             $e->getMessage();
         }
     } elseif($_REQUEST['view_id']){
         try {
+
+            // select data from views_id
             $id = $_REQUEST['view_id'];
             $select_stmt = $conn->prepare('SELECT * FROM article_tb WHERE id_article = :id');
             $select_stmt->execute([$id]);
             $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
             extract($row);
+
         } catch(PDOException $e) {
             $e->getMessage();
         }
+
+        if (isset($_GET['delete'])) {
+            $delete_id = $_GET['delete'];
+            $deletestmt = $conn->query("DELETE FROM article_comment WHERE id = $delete_id");
+            $deletestmt->execute();
+            
+            if ($deletestmt) {
+                echo "<script>alert('Data has been deleted successfully');</script>";
+                $_SESSION['success'] = "Data has been deleted succesfully";
+                header("refresh:1; url=index.php");
+            }
+        }
     }
-     
+
+    //update views
+    $update_stmt = $conn->prepare("UPDATE article_tb SET views = views+1 WHERE id_article = :id_article");
+    $update_stmt->bindValue(':id_article', $id);
+    $update_stmt->execute();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,6 +63,8 @@
     <link rel="stylesheet" href="view-blog.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" />
+
 </head>
 <body>
 <?php
@@ -120,9 +146,10 @@
     </div>
   </nav>
     <div class="header-blog">
-        <p># View Blog</p>
+        <p>#View Blog</p>
         <h1><?php echo $article['title']?></h1>
         <p class="timestemp" style="font-size: 15px; font-weight: 600; color: #77603e;"><?php echo $article['time_stamp'];?></p>
+        <p class="timestemp" style="font-size: 15px; font-weight: 600; color: #77603e;"><i class="fa-regular fa-user"></i> : <?php echo $article['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article['views'];?></p>
     </div>
 
 
@@ -214,14 +241,14 @@ if($comm['username'] === isset($_SESSION['username']) || isset($_SESSION['admin_
 ?>
     </div>
 
-    <?php
-    $conn = null;
-    ?>
 <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
     <div class="container text-center">
       <small>Copyright &copy; Website</small>
     </div>
 </footer>
 
+    <?php
+    $conn = null;
+    ?>
 </body>
 </html>

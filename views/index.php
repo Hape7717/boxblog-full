@@ -14,10 +14,11 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-    <title>Box Blog | Admin</title>
+    <title>Box Blog</title>
     <link rel="icon" type="image/jpg" href="img/logo/PNG/327316533_1188676491793928_5497790955519278487_n.jpg"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" />
 
-</head>
+  </head>
 <body class="bg-pan-left">
 <nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
     <div class="container-fluid">
@@ -117,7 +118,7 @@
             </div>
             <p class="blog-grid-item-title" style="  white-space: nowrap; width: 600px; overflow: hidden; text-overflow: ellipsis; "><?php echo $article['title']; ?></p>
             <p class="blog-grid-item-Detail" style=" max-width: 200ch; white-space: nowrap; width: 600px; overflow: hidden; text-overflow: ellipsis;"><?php echo $article['description']; ?></p>
-            <p class="blog-grid-item-Detail post-by"></p>By : <?php echo $article['username']; ?></p>
+            <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch;"><i class="fa-regular fa-user"></i> : <?php echo $article['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article['views'];?></p>
           </div>
         </a>
         <hr class="line-gr">
@@ -125,8 +126,7 @@
 <?php
 }
 
-    $query = "SELECT *, COUNT(views) as count FROM article_tb GROUP BY views ORDER BY count ASC LIMIT 3";
-
+    $query = "SELECT * FROM article_tb WHERE views != (SELECT MAX(views) FROM article_tb) ORDER BY views DESC LIMIT 3";
 // Execute the query and fetch the results
   $stmt = $conn->prepare($query);
   $stmt->execute();
@@ -145,7 +145,7 @@
             </div>
             <p class="blog-grid-item-title-sm" style="  white-space: nowrap; width: 400px; overflow: hidden; text-overflow: ellipsis; "><?php echo $article2['title']; ?></p>
             <p class="blog-grid-item-Detail-sm" style="max-width: 200ch;"><?php echo $article2['description']; ?></p>
-            <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch;">By : <?php echo $article2['username']; ?></p>
+            <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch;"><i class="fa-regular fa-user"></i> : <?php echo $article2['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article2['views'];?></p>
           </div>
         </a>
         <hr class="line-gr">
@@ -194,7 +194,7 @@
           </div>
           <p class="blog-grid-item-title-sm" style="  white-space: nowrap; width: 400px; overflow: hidden; text-overflow: ellipsis; "><?php echo $articleAll['title']; ?></p>
           <p class="blog-grid-item-Detail-sm all-article"></p><?php echo $articleAll['description']; ?></p>
-          <p class="blog-grid-item-Detail-sm"></p>By : <?php echo $articleAll['username']; ?></p>
+          <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch;"><i class="fa-regular fa-user"></i> : <?php echo $articleAll['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $articleAll['views'];?></p>
         </div>
       </a>
       <hr class="line-gr">

@@ -1,8 +1,16 @@
 <?php 
 
-    session_start();
-    require_once '../config/db.php';
+session_start();
+require_once '../config/db.php';
 
+  $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
+  $stmt->bindParam(":username", $_SESSION['username']);
+  $stmt->execute();
+  // set the resulting array to associative
+  $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+  $users = $stmt->fetch();
+
+   $avatar = $users["avatar"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +59,7 @@
 
                     <!-- show when admin session -->
                     <?php
+                    echo $avatar2 = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
                         if(isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == "admin"){
                             echo '<li class="nav-item dropdown">
                                     <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -67,15 +76,8 @@
                         }if(isset($_SESSION['admin_login']) || isset($_SESSION['user_login'])){
                             echo '<li class="nav-item dropdown">
                                     <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="https://media.discordapp.net/attachments/565616795491237903/1067092049179967498/326123871_704655427944305_9033912089748847351_n.png?width=404&height=606" 
-                                        class="rounded-circle"
-                                        height="25"
-                                        width="25"
-                                        alt="Black and White Portrait of a Man"
-                                        loading="lazy"
-                                        style="object-fit: cover;"
-                                        />
-                                    </a>
+                                        <img src="<?php echo ($avatar ? $avatar : $avatar2); ?>" class="rounded-circle" height="25" width="25" alt="Black and White Portrait of a Man" loading="lazy" style="object-fit: cover;"/>
+                                    </>
                                     <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
                                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                                         <li><a class="dropdown-item" href="logout.php">Logout</a></li>
@@ -99,14 +101,6 @@
   </nav>
   <!-- end nav -->
 
-  <?php
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
-    $stmt->bindParam(":username", $_SESSION['username']);
-    $stmt->execute();
-    // set the resulting array to associative
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    $users = $stmt->fetch();
-?>
     <div class="header-blog">
         <p># Update profile</p>
     </div>
@@ -143,14 +137,14 @@
 
                 <div class="user-img">
                         <div class="align-img">
-                            <img class="user-avata rounded-circle" src="img/blog/149797109_2830131550535601_4696178937080333795_n.jpg" alt="" srcset="">
+                            <img class="user-avata rounded-circle" src="<?php echo ($users['avatar'] ? $users['avatar'] : $avatar2); ?>" alt="" srcset="">
                         </div>
                         <div style="text-align: center; padding: 20px 0;">
                           <h5 class="user-name"><?php echo $users['username']; ?></h5>
                           <h6 class="user-email"><?php echo $users['email']; ?></h6>
                           <br>
                           <label for="" class="form-label">Change image</label>
-                          <input type="file" class="form-control">
+                          <input class="form-control" type="file" id="formfile" name="avatar">
                         </div>
                 </div>
 

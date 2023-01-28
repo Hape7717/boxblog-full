@@ -177,7 +177,7 @@
     } );
 </script>
 
-        <script>
+<script>
             $(".delete-btn").click(function(e) {
                         var userId = $(this).data('id');
                         e.preventDefault();
@@ -205,6 +205,8 @@
                                                 title: 'success',
                                                 text: 'Data deleted successfully!',
                                                 icon: 'success',
+                                                iconColor: '#672D2D',
+                                                confirmButtonColor: '#684107',
                                             }).then(() => {
                                                 document.location.href = 'manage-user.php';
                                             })

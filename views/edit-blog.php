@@ -6,18 +6,34 @@
         header("location: index.php");
     }
 
-    
-    if (isset($_REQUEST['update_id'])) {
+
+    if(isset($update_id['update_id'])){
+        try {            
+            
+            // select data from views_id
+            $id = $views_id['id'];
+            $select_stmt = $conn->prepare('SELECT * FROM article_tb WHERE id = :id');
+            $select_stmt->execute([$id]);
+            $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
+            extract($row);
+
+        } catch(PDOException $e) {
+            $e->getMessage();
+        }
+} elseif ($_REQUEST['update_id']) {
         try {
+
+            // select data from views_id
             $id = $_REQUEST['update_id'];
             $select_stmt = $conn->prepare('SELECT * FROM article_tb WHERE id = :id');
             $select_stmt->execute([$id]);
             $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
             extract($row);
-        } catch(PDOException $e) {
+
+        } catch (PDOException $e) {
             $e->getMessage();
         }
-    }       
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -149,6 +165,32 @@
         <div class="container">
             <div style="margin: 6% 0;">
                 <form action="../controller/edit-blog-db.php" method="post" enctype="multipart/form-data">
+                                    <!-- alert  -->
+                <?php if(isset($_SESSION['error'])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php 
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['success'])) { ?>
+                <div class="alert alert-warning" role="alert">
+                    <?php 
+                        echo $_SESSION['success'];
+                        unset($_SESSION['success']);
+                    ?>
+                </div>
+            <?php } ?>
+            <?php if(isset($_SESSION['warning'])) { ?>
+                <div class="alert alert-warning" role="alert">
+                    <?php 
+                        echo $_SESSION['warning'];
+                        unset($_SESSION['warning']);
+                    ?>
+                </div>
+            <?php } ?>
+            <!-- end alert  -->
                     <div>
                         <label for="multi" class="form-label">Category</label><br>
                         <select style="width: 400px;" id="multi" class="multi" multiple="true" name="category" value="">
@@ -161,18 +203,23 @@
                     <div>
                         <label for="title" class="form-label">Title Blog</label>
                         <input type="hidden" name="id" id="id" value="<?php echo $article['id_article']?>">   
-                        <input type="text" placeholder="Enter Title" class="form-control" name="title" value="<?php echo $article['title'] ?>">
+                        <input type="text" placeholder="Enter Title" class="form-control" name="title" value="<?php echo $article['title']; ?>">
+                    </div>
+                    <br>
+                    <div>
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" placeholder="Enter description" class="form-control" name="description" maxlength="200" value="<?php echo $article['description']; ?>">
                     </div>
                     <br>
                     <div>
                         <label for="headerimage" class="form-label">Header Image</label>
                         <!-- <img src="" alt="" srcset=""> -->
-                        <input class="form-control" type="file" id="formfile" name="headerimage" value="<?php echo $article['header_image'] ?>">
+                        <input class="form-control" type="file" id="formfile" name="headerimage" value="<?php echo $article['header_image']; ?>">
                     </div>
                     <br>
                     <div class="">
                         <label for="content" class="form-label">Content</label>
-                        <textarea id="editor" style="height: 800px;" class="form-control" placeholder="Leave a comment here" name="content"><?php echo $article['content'] ?></textarea>
+                        <textarea id="editor" style="height: 800px;" class="form-control" placeholder="Leave a comment here" name="content"><?php echo $article['content']; ?></textarea>
                     </div><br>
                     <button type="submit" id="submit" class="btn-diy" name="btn_update">Update</button>&nbsp;<button type="reset" class="btn-diy">Cancel</button>
                 </form>

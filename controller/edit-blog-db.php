@@ -1,43 +1,49 @@
 <?php
     include_once('../config/db.php');
 
-if(isset($_POST['btn_update'])) {
-    // Collect the data from the form
-    echo $id = $_POST["id"];
+
+        // check if the form is submitted
+if (isset($_POST['btn_update'])) {
+    // get the form data
+    $id = $_POST["id"];
+    $category = $_POST['category'];
     $title = $_POST['title'];
     $content = $_POST['content'];
-    $categories = $_POST['category'];
-    $img = $_FILES['headerimage'];
+    $description = $_POST['description'];
 
-    // Validate the data
-    if(empty($title)) {
-        echo $_SESSION['error'] = "Please enter a title";
-    }
-    if(empty($content)) {
-        echo $_SESSION['error'] = "Please enter some content";
-    }
-    if(empty($categories)) {
-        echo $_SESSION['error'] = "Please select at least one category";
-    }
-    if(empty($headerimage)) {
-        echo $_SESSION['error'] = "Please select a header image";
-    }
+    $stmt = $conn->prepare("SELECT header_image FROM article_tb WHERE id_article = ?");
+    $stmt->execute([$id]);
+    $articles = $stmt->fetch();
 
+    $_SESSION['error'] = array();
+
+    $date1 = date("Ymd_His");
+    //สร้างตัวแปรสุ่มตัวเลขเพื่อเอาไปตั้งชื่อไฟล์ที่อัพโหลดไม่ให้ชื่อไฟล์ซ้ำกัน
+    $numrand = (mt_rand());
+    $img_file = (isset($_POST['headerimage']) ? $_POST['headerimage'] : '');
     $upload = $_FILES['headerimage']['name'];
 
+    //มีการอัพโหลดไฟล์
     if ($upload != '') {
-        $allow = array('jpg', 'jpeg', 'png');
-        $extension = explode(".", $img['name']);
-        $fileActExt = strtolower(end($extension));
-        $fileNew = rand() . "." . $fileActExt;
-        $filePath = "../uploads/".$fileNew;
+        //ตัดขื่อเอาเฉพาะนามสกุล
+        $typefile = strrchr($_FILES['headerimage']['name'], ".");
 
-        if (in_array($fileActExt, $allow)) {
-            if ($img['size'] > 0 && $img['error'] == 0) {
-                move_uploaded_file($img['tmp_name'], $filePath);
-            }
+        //สร้างเงื่อนไขตรวจสอบนามสกุลของไฟล์ที่อัพโหลดเข้ามา
+        if ($typefile == '.jpg' || $typefile == '.jpeg' || $typefile == '.png') {
+
+            //โฟลเดอร์ที่เก็บไฟล์
+            $path = "../uploads/";
+            //ตั้งชื่อไฟล์ใหม่เป็น สุ่มตัวเลข+วันที่
+            $newname = $numrand . $date1 . $typefile;
+            $path_copy = $path . $newname;
+            //คัดลอกไฟล์ไปยังโฟลเดอร์
+            move_uploaded_file($_FILES['headerimage']['tmp_name'], $path_copy);
         }
-    } 
+    }else{
+        $newname = $articles['header_image'];
+    }
+        // Validate the data
+
 
     // If there are no errors, update the data
     if(empty($_SESSION['error'])) {
@@ -46,12 +52,12 @@ if(isset($_POST['btn_update'])) {
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':title', $title);
         $stmt->bindParam(':content', $content);
-        $stmt->bindParam(':categories', $categories);
-        $stmt->bindParam(':headerimage', $fileNew);
+        $stmt->bindParam(':categories', $category);
+        $stmt->bindParam(':headerimage', $newname);
         $stmt->execute();
         // Redirect the user to a success page
         echo $_SESSION['success'] = "Data updated succesfully";
-        // header("Location: success.php");
+        header("Location: ../views/edit-blog.php?update_id=".$id);
         exit;
     }
 }
