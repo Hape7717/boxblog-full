@@ -2,6 +2,11 @@
 
     session_start();
     require_once '../config/db.php';
+    
+    $stmt = $conn->prepare("SELECT avatar FROM users WHERE username = :username");
+    $stmt->bindParam(':username', $_SESSION['username']);
+    $stmt->execute();
+    $avatar = $stmt->fetchColumn();
 
 ?>
 <!DOCTYPE html>
@@ -40,79 +45,89 @@
             }
         </style>
 
-    <nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
-        <div class="container-fluid">
-        <a class="navbar-brand" style="font-size: 30px; font-weight: 600;" href="index.php">
-            <img src="img/logo/PNG/BBCard.png" class="" alt=" " width="60" height="60" srcset="">
-            Box Blog
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-                <div class="d-flex">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+<!-- nav -->
+<nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
+    <div class="container-fluid">
+      <a class="navbar-brand" style="font-size: 30px; font-weight: 600;" href="index.php">
+        <img src="img/logo/PNG/BBCard.png" class="" alt=" " width="60" height="60" srcset="">
+        Box Blog
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+            <div class="d-flex">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                    <!-- Menu list -->
+                  <!-- Menu list -->
 
-                        <li class="nav-item">
-                            <a class="nav-menu-active" aria-current="page" href="index.php">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-menu" href="index.php#all-blog">All blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-menu" href="about.php">About</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-menu-active" aria-current="page" href="index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-menu" href="index.php#all-blog">All blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-menu" href="about.php">About</a>
+                    </li>
 
-                        <!-- show when admin session -->
-                        <?php
-                            if(isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == "admin"){
+                    <!-- show when admin session -->
+                    <?php
+                    
+                    //default image
+                    $avatar2 = 'user.PNG';
+                    // echo $avatar;
+                    // print_r($avatar);
+
+                        if(isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == "admin"){
+                            echo '<li class="nav-item dropdown">
+                                    <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Manage Blog
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                                        <li><a class="dropdown-item" href="manage-blog.php">Manage Blog</a></li>
+                                        <li><a class="dropdown-item" href="add-blog.php">Add Blog</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-menu" href="manage-user.php">Manage User</a>
+                                </li>';
+                        }if(isset($_SESSION['admin_login']) || isset($_SESSION['user_login'])){
+
                                 echo '<li class="nav-item dropdown">
-                                        <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Manage Blog
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                                            <li><a class="dropdown-item" href="manage-blog.php">Manage Blog</a></li>
-                                            <li><a class="dropdown-item" href="add-blog.php">Add Blog</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-menu" href="manage-user.php">Manage User</a>
-                                    </li>';
-                            }if(isset($_SESSION['admin_login']) || isset($_SESSION['user_login'])){
-                                echo '<li class="nav-item dropdown">
-                                        <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img src="https://media.discordapp.net/attachments/565616795491237903/1067092049179967498/326123871_704655427944305_9033912089748847351_n.png?width=404&height=606" 
-                                            class="rounded-circle"
-                                            height="25"
-                                            width="25"
-                                            alt="Black and White Portrait of a Man"
-                                            loading="lazy"
-                                            style="object-fit: cover;"
-                                            />
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                                            <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                                        </ul>
-                                    </li>';
-                            }else{
-                                echo '
-                                    <li class="nav-item">
-                                        <a class="nav-menu" href="register.php">Register</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-menu-active" href="login.php">Log in</a>
-                                    </li>';
-                            }
-                        ?>
-                    </ul>
-                </div>
-        </div>
-        </div>
-    </nav>
+                                <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="../uploads/'.($avatar ? $avatar : $avatar2).'" 
+                                    class="rounded-circle"
+                                    height="25"
+                                    width="25"
+                                    alt="Black and White Portrait of a Man"
+                                    loading="lazy"
+                                    style="object-fit: cover;"
+                                    />
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                </ul>
+                            </li>';
+                        }else{
+                            echo '
+                                <li class="nav-item">
+                                    <a class="nav-menu" href="register.php">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-menu-active" href="login.php">Log in</a>
+                                </li>';
+                        }
+                    ?>
+                </ul>
+
+            </div>
+      </div>
+    </div>
+  </nav>
+  <!-- end nav -->
     <div>
           <div class="header-blog" >
             <p># Manage Blog</p>

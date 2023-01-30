@@ -59,7 +59,11 @@ require_once '../config/db.php';
 
                     <!-- show when admin session -->
                     <?php
-                    echo $avatar2 = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png';
+                    
+                    //default image
+                    $avatar2 = 'user.PNG';
+                    // print_r($avatar);
+
                         if(isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == "admin"){
                             echo '<li class="nav-item dropdown">
                                     <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -74,15 +78,23 @@ require_once '../config/db.php';
                                     <a class="nav-menu" href="manage-user.php">Manage User</a>
                                 </li>';
                         }if(isset($_SESSION['admin_login']) || isset($_SESSION['user_login'])){
-                            echo '<li class="nav-item dropdown">
-                                    <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="<?php echo ($avatar ? $avatar : $avatar2); ?>" class="rounded-circle" height="25" width="25" alt="Black and White Portrait of a Man" loading="lazy" style="object-fit: cover;"/>
-                                    </>
-                                    <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                                    </ul>
-                                </li>';
+
+                                echo '<li class="nav-item dropdown">
+                                <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="../uploads/'.($avatar ? $avatar : $avatar2).'" 
+                                    class="rounded-circle"
+                                    height="25"
+                                    width="25"
+                                    alt="Black and White Portrait of a Man"
+                                    loading="lazy"
+                                    style="object-fit: cover;"
+                                    />
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                </ul>
+                            </li>';
                         }else{
                             echo '
                                 <li class="nav-item">
@@ -106,7 +118,7 @@ require_once '../config/db.php';
     </div>
     
     <div class="container ">
-    <form action="../controller/profile-db.php" method="post">
+    <form action="../controller/profile-db.php" method="post" enctype="multipart/form-data">
       <!-- alert  -->
       <?php if(isset($_SESSION['error'])) { ?>
         <div class="alert alert-danger" role="alert">
@@ -137,14 +149,14 @@ require_once '../config/db.php';
 
                 <div class="user-img">
                         <div class="align-img">
-                            <img class="user-avata rounded-circle" src="<?php echo ($users['avatar'] ? $users['avatar'] : $avatar2); ?>" alt="" srcset="">
+                            <img class="user-avata rounded-circle" src="../uploads/<?php echo ($users['avatar'] ? $users['avatar'] : $avatar2); ?>" alt="" srcset="">
                         </div>
                         <div style="text-align: center; padding: 20px 0;">
                           <h5 class="user-name"><?php echo $users['username']; ?></h5>
                           <h6 class="user-email"><?php echo $users['email']; ?></h6>
                           <br>
                           <label for="" class="form-label">Change image</label>
-                          <input class="form-control" type="file" id="formfile" name="avatar">
+                          <input class="form-control" type="file" id="formfile" name="img_file">
                         </div>
                 </div>
 
@@ -157,7 +169,8 @@ require_once '../config/db.php';
                         <div>
                             <label class="form-label" for="username">Username</label>
                             <input type="hidden" name="id" value="<?php echo $users['id']; ?>">
-                            <input type="text" class="form-control" id="fullName" value="<?php echo $users['username']; ?>" name="username">
+                            <input type="hidden" name="username" value="<?php echo $users['username']; ?>">
+                            <input type="text" class="form-control" id="fullName" value="<?php echo $users['username']; ?>"  disabled>
                         </div>
                         <div>
                             <label class="form-label" for="e-mail">E-mail</label>
@@ -168,7 +181,7 @@ require_once '../config/db.php';
                             <input type="text" class="form-control" id="phone" value="<?php echo $users['password']; ?>" name="password">
                         </div>
                     </div><br><br>
-                    <button type="submit" name="signup" class="btn-diy-2">Save change</button>
+                    <button type="submit" name="udate-profile" class="btn-diy-2">Save change</button>
                 </div>
             </div>
         </form><br><br>

@@ -3,6 +3,11 @@
     session_start();
     require_once '../config/db.php';
 
+    $stmt = $conn->prepare("SELECT avatar FROM users WHERE username = :username");
+    $stmt->bindParam(':username', $_SESSION['username']);
+    $stmt->execute();
+    $avatar = $stmt->fetchColumn();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,9 +22,11 @@
     <title>Box Blog</title>
     <link rel="icon" type="image/jpg" href="img/logo/PNG/327316533_1188676491793928_5497790955519278487_n.jpg"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/jquery-3.6.3.min.js">
 
   </head>
 <body class="bg-pan-left">
+<!-- nav -->
 <nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
     <div class="container-fluid">
       <a class="navbar-brand" style="font-size: 30px; font-weight: 600;" href="index.php">
@@ -40,7 +47,7 @@
                         <a class="nav-menu-active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-menu" href="#all-blog">All blog</a>
+                        <a class="nav-menu" href="index.php#all-blog">All blog</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-menu" href="about.php">About</a>
@@ -48,6 +55,12 @@
 
                     <!-- show when admin session -->
                     <?php
+                    
+                    //default image
+                    $avatar2 = 'user.PNG';
+                    // echo $avatar;
+                    // print_r($avatar);
+
                         if(isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == "admin"){
                             echo '<li class="nav-item dropdown">
                                     <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,22 +75,23 @@
                                     <a class="nav-menu" href="manage-user.php">Manage User</a>
                                 </li>';
                         }if(isset($_SESSION['admin_login']) || isset($_SESSION['user_login'])){
-                            echo '<li class="nav-item dropdown">
-                                    <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="https://media.discordapp.net/attachments/565616795491237903/1067092049179967498/326123871_704655427944305_9033912089748847351_n.png?width=404&height=606" 
-                                        class="rounded-circle"
-                                        height="25"
-                                        width="25"
-                                        alt="Black and White Portrait of a Man"
-                                        loading="lazy"
-                                        style="object-fit: cover;"
-                                        />
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                                    </ul>
-                                </li>';
+
+                                echo '<li class="nav-item dropdown">
+                                <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="../uploads/'.($avatar ? $avatar : $avatar2).'" 
+                                    class="rounded-circle"
+                                    height="25"
+                                    width="25"
+                                    alt="Black and White Portrait of a Man"
+                                    loading="lazy"
+                                    style="object-fit: cover;"
+                                    />
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                </ul>
+                            </li>';
                         }else{
                             echo '
                                 <li class="nav-item">
@@ -89,10 +103,12 @@
                         }
                     ?>
                 </ul>
+
             </div>
       </div>
     </div>
   </nav>
+  <!-- end nav -->
 
     <div class="header-blog" id="recommended">
       <p># Our Blog</p>
@@ -118,7 +134,7 @@
             </div>
             <p class="blog-grid-item-title" style="  white-space: nowrap; width: 600px; overflow: hidden; text-overflow: ellipsis; "><?php echo $article['title']; ?></p>
             <p class="blog-grid-item-Detail" style=" max-width: 200ch; white-space: nowrap; width: 600px; overflow: hidden; text-overflow: ellipsis;"><?php echo $article['description']; ?></p>
-            <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch;"><i class="fa-regular fa-user"></i> : <?php echo $article['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article['views'];?></p>
+            <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch; text-transform: capitalize;"><i class="fa-regular fa-user"></i> : <?php echo $article['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article['views'];?></p>
           </div>
         </a>
         <hr class="line-gr">
@@ -145,7 +161,7 @@
             </div>
             <p class="blog-grid-item-title-sm" style="  white-space: nowrap; width: 400px; overflow: hidden; text-overflow: ellipsis; "><?php echo $article2['title']; ?></p>
             <p class="blog-grid-item-Detail-sm" style="max-width: 200ch;"><?php echo $article2['description']; ?></p>
-            <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch;"><i class="fa-regular fa-user"></i> : <?php echo $article2['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article2['views'];?></p>
+            <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch; text-transform: capitalize; "><i class="fa-regular fa-user"></i> : <?php echo $article2['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article2['views'];?></p>
           </div>
         </a>
         <hr class="line-gr">
@@ -171,16 +187,18 @@
     <div class="container-our-blog" id="all-blog">
       <h2 style="font-size: 25px; color: #2F200A; font-weight: 700;">All blog post</h2>
       <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
+        <input type="text" name="search_text" id="search_text" placeholder="Search ..." class="form-control me-2" aria-label="Search"/>
+
         <button class="btn-diy" type="submit">Search</button>
       </form>
+      
     </div>
-
-
+    
+    
     <div class="container-all-blog" id="all-blog">
-
       <?php
-        $stmt = $conn->prepare("SELECT * FROM article_tb");
+        $stmt = $conn->prepare("SELECT * FROM article_tb ");
         $stmt->execute();
         $articleAlls = $stmt->fetchAll();
         foreach ($articleAlls as $articleAll) {
@@ -194,7 +212,7 @@
           </div>
           <p class="blog-grid-item-title-sm" style="  white-space: nowrap; width: 400px; overflow: hidden; text-overflow: ellipsis; "><?php echo $articleAll['title']; ?></p>
           <p class="blog-grid-item-Detail-sm all-article"></p><?php echo $articleAll['description']; ?></p>
-          <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch;"><i class="fa-regular fa-user"></i> : <?php echo $articleAll['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $articleAll['views'];?></p>
+          <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch; text-transform: capitalize;"><i class="fa-regular fa-user"></i> : <?php echo $articleAll['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $articleAll['views'];?></p>
         </div>
       </a>
       <hr class="line-gr">

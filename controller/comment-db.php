@@ -29,7 +29,7 @@
             try {
 
             if (!isset($_SESSION['error'])) {
-                    $stmt = $conn->prepare("INSERT INTO article_comment(comment, username, id_article) 
+                    $stmt = $conn->prepare("INSERT INTO article_comment( comment, username, id_article) 
                                             VALUES(:comment, :username, :id_article)");
                     $stmt->bindParam(":comment", $comment);
                     $stmt->bindParam(":username", $username);

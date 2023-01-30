@@ -3,6 +3,11 @@
     session_start();
     include_once('../config/db.php');
 
+    $stmt = $conn->prepare("SELECT avatar FROM users WHERE username = :username");
+    $stmt->bindParam(':username', $_SESSION['username']);
+    $stmt->execute();
+    $avatar = $stmt->fetchColumn();
+
     if(isset($views_id['id'])){
         try {            
             
@@ -12,36 +17,29 @@
             $select_stmt->execute([$id]);
             $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
             extract($row);
-
+            
+            
         } catch(PDOException $e) {
             $e->getMessage();
         }
     } elseif($_REQUEST['view_id']){
         try {
-
+            
             // select data from views_id
             $id = $_REQUEST['view_id'];
             $select_stmt = $conn->prepare('SELECT * FROM article_tb WHERE id_article = :id');
             $select_stmt->execute([$id]);
             $row = $select_stmt->fetch(PDO::FETCH_ASSOC);
             extract($row);
-
+            
         } catch(PDOException $e) {
             $e->getMessage();
         }
-
-        if (isset($_GET['delete'])) {
-            $delete_id = $_GET['delete'];
-            $deletestmt = $conn->query("DELETE FROM article_comment WHERE id = $delete_id");
-            $deletestmt->execute();
-            
-            if ($deletestmt) {
-                echo "<script>alert('Data has been deleted successfully');</script>";
-                $_SESSION['success'] = "Data has been deleted succesfully";
-                header("refresh:1; url=index.php");
-            }
-        }
+        
     }
+    
+    $_SESSION['views'] = $id;
+
 
     //update views
     $update_stmt = $conn->prepare("UPDATE article_tb SET views = views+1 WHERE id_article = :id_article");
@@ -56,7 +54,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>View | Blog</title>
     <link rel="icon" type="image/jpg" href="img/logo/PNG/327316533_1188676491793928_5497790955519278487_n.jpg"/>
 
     <link rel="stylesheet" href="style.css">
@@ -72,7 +70,8 @@
     $stmt->execute([$id]);
     $article = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
-  <nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
+<!-- nav -->
+<nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
     <div class="container-fluid">
       <a class="navbar-brand" style="font-size: 30px; font-weight: 600;" href="index.php">
         <img src="img/logo/PNG/BBCard.png" class="" alt=" " width="60" height="60" srcset="">
@@ -92,7 +91,7 @@
                         <a class="nav-menu-active" aria-current="page" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-menu" href="#all-blog">All blog</a>
+                        <a class="nav-menu" href="index.php#all-blog">All blog</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-menu" href="about.php">About</a>
@@ -100,6 +99,12 @@
 
                     <!-- show when admin session -->
                     <?php
+                    
+                    //default image
+                    $avatar2 = 'user.PNG';
+                    // echo $avatar;
+                    // print_r($avatar);
+
                         if(isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == "admin"){
                             echo '<li class="nav-item dropdown">
                                     <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -114,22 +119,23 @@
                                     <a class="nav-menu" href="manage-user.php">Manage User</a>
                                 </li>';
                         }if(isset($_SESSION['admin_login']) || isset($_SESSION['user_login'])){
-                            echo '<li class="nav-item dropdown">
-                                    <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img src="https://media.discordapp.net/attachments/565616795491237903/1067092049179967498/326123871_704655427944305_9033912089748847351_n.png?width=404&height=606" 
-                                        class="rounded-circle"
-                                        height="25"
-                                        width="25"
-                                        alt="Black and White Portrait of a Man"
-                                        loading="lazy"
-                                        style="object-fit: cover;"
-                                        />
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-                                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
-                                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                                    </ul>
-                                </li>';
+
+                                echo '<li class="nav-item dropdown">
+                                <a class="nav-menu dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="../uploads/'.($avatar ? $avatar : $avatar2).'" 
+                                    class="rounded-circle"
+                                    height="25"
+                                    width="25"
+                                    alt="Black and White Portrait of a Man"
+                                    loading="lazy"
+                                    style="object-fit: cover;"
+                                    />
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                </ul>
+                            </li>';
                         }else{
                             echo '
                                 <li class="nav-item">
@@ -141,14 +147,16 @@
                         }
                     ?>
                 </ul>
+
             </div>
       </div>
     </div>
   </nav>
+  <!-- end nav -->
     <div class="header-blog">
         <p>#View Blog</p>
         <h1><?php echo $article['title']?></h1>
-        <p class="timestemp" style="font-size: 15px; font-weight: 600; color: #77603e;"><?php echo $article['time_stamp'];?></p>
+        <p class="timestemp" style="font-size: 15px; font-weight: 600; color: #77603e;"><?php echo timeAgo($article['time_stamp']);?></p>
         <p class="timestemp" style="font-size: 15px; font-weight: 600; color: #77603e;"><i class="fa-regular fa-user"></i> : <?php echo $article['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article['views'];?></p>
     </div>
 
@@ -207,7 +215,7 @@ if(!isset($_SESSION['username'])){
 $stmt = $conn->prepare("SELECT * FROM article_comment WHERE id_article = ?");
 $stmt->execute([$id]);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+// echo $results['username'];
 foreach ($results as $comm) {
     $comm_id = $comm['id_comm'];
 
@@ -221,7 +229,7 @@ foreach ($results as $comm) {
 if($comm['username'] === isset($_SESSION['username']) || isset($_SESSION['admin_login'])){
     echo '
     <div class="user-name" style="display: flex;">
-    <a data-id="'.$comm_id.'" href="?view_id='.$id.'?delete='.$comm_id.'" class="link-txt delete-btn">Delete</a>
+    <a data-id="'.$comm_id.'" href="../controller/delete-comment.php?delete='.$comm_id.'" class="link-txt delete-btn">Delete</a>
     <a href="" class="link-txt">Edit</a>
     </div>
     ';
@@ -233,6 +241,9 @@ if($comm['username'] === isset($_SESSION['username']) || isset($_SESSION['admin_
                 </div>
                 <div>
                     <p><?php echo $comm['comment'];?></p>
+                    <!-- print_r(time_ago('2022-07-07 07:50:09')); -->
+
+                    <p><?php echo timeAgo($comm['comm_stamp']);?></p>
                 </div>
             </div>
             <hr class="under-line">
@@ -247,8 +258,41 @@ if($comm['username'] === isset($_SESSION['username']) || isset($_SESSION['admin_
     </div>
 </footer>
 
-    <?php
-    $conn = null;
-    ?>
+<!-- time ago set -->
+<?php
+function timeAgo($time_ago) {
+    $time_ago =  strtotime($time_ago) ? strtotime($time_ago) : $time_ago;
+    $time  = time() - $time_ago;
+
+switch($time):
+// seconds
+case $time <= 60;
+return 'just now';
+// minutes
+case $time >= 60 && $time < 3600;
+return (round($time/60) == 1) ? 'a minute' : round($time/60).' minutes ago';
+// hours
+case $time >= 3600 && $time < 86400;
+return (round($time/3600) == 1) ? 'a hour ago' : round($time/3600).' hours ago';
+// days
+case $time >= 86400 && $time < 604800;
+return (round($time/86400) == 1) ? 'a day ago' : round($time/86400).' days ago';
+// weeks
+case $time >= 604800 && $time < 2600640;
+return (round($time/604800) == 1) ? 'a week ago' : round($time/604800).' weeks ago';
+// months
+case $time >= 2600640 && $time < 31207680;
+return (round($time/2600640) == 1) ? 'a month ago' : round($time/2600640).' months ago';
+// years
+case $time >= 31207680;
+return (round($time/31207680) == 1) ? 'a year ago' : round($time/31207680).' years ago' ;
+
+endswitch;
+}
+
+
+$conn = null;
+?>
+<!-- end time ago set -->
 </body>
 </html>
