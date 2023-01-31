@@ -24,10 +24,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" />
     <link rel="stylesheet" href="https://code.jquery.com/jquery-3.6.3.min.js">
 
+       <!-- Including jQuery is required. -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+       <!-- Including our scripting file. -->
+      <script type="text/javascript" src="script.js"></script>
+
   </head>
 <body class="bg-pan-left">
 <!-- nav -->
-<nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
+<nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
     <div class="container-fluid">
       <a class="navbar-brand" style="font-size: 30px; font-weight: 600;" href="index.php">
         <img src="img/logo/PNG/BBCard.png" class="" alt=" " width="60" height="60" srcset="">
@@ -132,8 +137,8 @@
             <div class="blog-grid-tag">
               <p href="" class="tag"><?php echo $article['categories']; ?></p>
             </div>
-            <p class="blog-grid-item-title" style="  white-space: nowrap; width: 600px; overflow: hidden; text-overflow: ellipsis; "><?php echo $article['title']; ?></p>
-            <p class="blog-grid-item-Detail" style=" max-width: 200ch; white-space: nowrap; width: 600px; overflow: hidden; text-overflow: ellipsis;"><?php echo $article['description']; ?></p>
+            <p class="blog-grid-item-title"><?php echo $article['title']; ?></p>
+            <p class="blog-grid-item-Detail" ><?php echo $article['description']; ?></p>
             <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch; text-transform: capitalize;"><i class="fa-regular fa-user"></i> : <?php echo $article['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article['views'];?></p>
           </div>
         </a>
@@ -159,7 +164,7 @@
             <div class="blog-grid-tag">
               <p href="" class="tag"><?php echo $article2['categories']; ?></p>
             </div>
-            <p class="blog-grid-item-title-sm" style="  white-space: nowrap; width: 400px; overflow: hidden; text-overflow: ellipsis; "><?php echo $article2['title']; ?></p>
+            <p class="blog-grid-item-title-sm"><?php echo $article2['title']; ?></p>
             <p class="blog-grid-item-Detail-sm" style="max-width: 200ch;"><?php echo $article2['description']; ?></p>
             <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch; text-transform: capitalize; "><i class="fa-regular fa-user"></i> : <?php echo $article2['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $article2['views'];?></p>
           </div>
@@ -187,39 +192,29 @@
     <div class="container-our-blog" id="all-blog">
       <h2 style="font-size: 25px; color: #2F200A; font-weight: 700;">All blog post</h2>
       <form class="d-flex">
-        <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
-        <input type="text" name="search_text" id="search_text" placeholder="Search ..." class="form-control me-2" aria-label="Search"/>
-
-        <button class="btn-diy" type="submit">Search</button>
-      </form>
+        <input type="text" id="search" placeholder="Search ..." class="form-control me-2"/>     
+      </div>
       
-    </div>
-    
-    
-    <div class="container-all-blog" id="all-blog">
-      <?php
-        $stmt = $conn->prepare("SELECT * FROM article_tb ");
-        $stmt->execute();
-        $articleAlls = $stmt->fetchAll();
-        foreach ($articleAlls as $articleAll) {
+      <!-- loop show fillter list -->
+      <div class="container filter-sec">
+        <a href="?category=all" class="button-99">All</a>
+        <?php
+      $stmt = $conn->prepare("SELECT DISTINCT categories FROM article_tb");
+      $stmt->execute();
+      $category = $stmt->fetchAll();
+      foreach ($category as $categoryAll) {
         ?>  
+    <a href="?category=<?php echo $categoryAll['categories']; ?>" class="button-99"><?php echo $categoryAll['categories']; ?></a>
+    <?php } ?>
+  </div>
+</form>
+    <!-- loop show fillter list -->
+    
 
-    <a href="views.php?view_id=<?php echo $articleAll['id_article']; ?>" class="blog-grid-item" style="flex-direction: row;">
-        <img class="img-item-blog" src="<?php echo '../uploads/'.$articleAll['header_image']; ?>"  alt="">
-        <div style="width: 100%; margin-left: 20px; padding: 10px;">
-          <div class="blog-grid-tag">
-            <p href="" class="tag"><?php echo $articleAll['categories']; ?></p>
-          </div>
-          <p class="blog-grid-item-title-sm" style="  white-space: nowrap; width: 400px; overflow: hidden; text-overflow: ellipsis; "><?php echo $articleAll['title']; ?></p>
-          <p class="blog-grid-item-Detail-sm all-article"></p><?php echo $articleAll['description']; ?></p>
-          <p class="blog-grid-item-Detail-sm article-sec" style="max-width: 200ch; text-transform: capitalize;"><i class="fa-regular fa-user"></i> : <?php echo $articleAll['username'];?> <i class="fa-regular fa-eye"></i> :  <?php echo $articleAll['views'];?></p>
-        </div>
-      </a>
-      <hr class="line-gr">
 
-      <?php } ?>
-      <hr class="line-gr">
-      
+
+       <!-- Suggestions will be displayed in below div. -->
+    <div class="container-all-blog" id="display">
     </div>
     
     <footer id="sticky-footer" class="flex-shrink-0 py-4 bg-dark text-white-50">
@@ -234,3 +229,19 @@
     $conn = null;
 ?>  
 </html>
+
+
+<!-- navbar transition  -->
+<script>
+  var prevScrollpos = window.pageYOffset;
+  window.onscroll = function() {
+    var currentScrollPos = window.pageYOffset;
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("navbar").style.top = "0";
+    } else {
+      document.getElementById("navbar").style.top = "-100px";
+    }
+    prevScrollpos = currentScrollPos;
+  }
+</script>
+  <!-- end navbar transition  -->

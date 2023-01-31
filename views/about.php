@@ -30,7 +30,7 @@
 <body class="bg-pan-left">
   
 <!-- nav -->
-<nav id="navBar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
+<nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar" style="padding: 10px 50px;">
     <div class="container-fluid">
       <a class="navbar-brand" style="font-size: 30px; font-weight: 600;" href="index.php">
         <img src="img/logo/PNG/BBCard.png" class="" alt=" " width="60" height="60" srcset="">
@@ -186,3 +186,18 @@
 ?>
 </body>
 </html>
+
+<!-- navbar transition  -->
+<script>
+  var prevScrollpos = window.pageYOffset;
+  window.onscroll = function() {
+    var currentScrollPos = window.pageYOffset;
+    if (prevScrollpos > currentScrollPos) {
+      document.getElementById("navbar").style.top = "0";
+    } else {
+      document.getElementById("navbar").style.top = "-100px";
+    }
+    prevScrollpos = currentScrollPos;
+  }
+</script>
+  <!-- end navbar transition  -->
