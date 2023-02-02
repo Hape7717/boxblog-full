@@ -133,7 +133,7 @@
           <!-- Recommended Blog 1-->
         <a href="views.php?view_id=<?php echo $article['id_article']; ?>" class="blog-grid-item-active">
           <div style="padding: 20px;">
-            <img src="<?php echo '../uploads/'.$article['header_image']; ?>" class="img-item-blog-lg" alt="">
+              <img src="<?php echo '../uploads/'.$article['header_image']; ?>" class="img-item-blog-lg" alt="">
             <div class="blog-grid-tag">
               <p href="" class="tag"><?php echo $article['categories']; ?></p>
             </div>
@@ -194,25 +194,7 @@
       <form class="d-flex">
         <input type="text" id="search" placeholder="Search ..." class="form-control me-2"/>     
       </div>
-      
-      <!-- loop show fillter list -->
-      <div class="container filter-sec">
-        <a href="?category=all" class="button-99">All</a>
-        <?php
-      $stmt = $conn->prepare("SELECT DISTINCT categories FROM article_tb");
-      $stmt->execute();
-      $category = $stmt->fetchAll();
-      foreach ($category as $categoryAll) {
-        ?>  
-    <a href="?category=<?php echo $categoryAll['categories']; ?>" class="button-99"><?php echo $categoryAll['categories']; ?></a>
-    <?php } ?>
-  </div>
-</form>
-    <!-- loop show fillter list -->
     
-
-
-
        <!-- Suggestions will be displayed in below div. -->
     <div class="container-all-blog" id="display">
     </div>

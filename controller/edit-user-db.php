@@ -6,8 +6,12 @@
         $id = $_POST['id'];
         $email = $_POST['email'];
         $password = $_POST['password'];
+        $role = $_POST['role'];
 
-        if (empty($id)) {
+        if (empty($role)) {
+            $_SESSION['error'] = 'Please select user rights.';
+            header("location: ../views/edit-user.php");
+        }elseif (empty($id)) {
             $_SESSION['error'] = 'ID is required';
             header("location: ../views/edit-user.php");
         }elseif (empty($email)) {
@@ -19,9 +23,10 @@
         }else{
         
         try {
-                $stmt = $conn->prepare("UPDATE users SET email = :email, password = :password WHERE id = :id");
+                $stmt = $conn->prepare("UPDATE users SET email = :email, password = :password, role = :role WHERE id = :id");
                 $stmt->bindParam(':email', $email);
                 $stmt->bindParam(':password', $password);
+                $stmt->bindParam(':role', $role);
                 $stmt->bindParam(':id', $id);
                 $stmt->execute();
 

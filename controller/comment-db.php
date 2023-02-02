@@ -35,12 +35,12 @@
                     $stmt->bindParam(":username", $username);
                     $stmt->bindParam(":id_article", $id_article);
                     $stmt->execute();
-                    echo $_SESSION['success'] = "Done commenting!";
+                    // echo $_SESSION['success'] = "Done commenting!";
                     // echo $views_id['id'] = $id_article;
                     header("location: ../views/views.php?view_id=".$id_article."#comment_under");
 
                 } else {
-                    echo $_SESSION['error'] = "something went wrong";
+                    // echo $_SESSION['error'] = "something went wrong";
                     // echo $views_id['id'] = $id_article;
                     header("location: ../views/views.php?view_id=".$id_article."#comment_under");
 

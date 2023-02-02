@@ -181,11 +181,22 @@
                         <input type="text" class="form-control" value="<?php echo $users['username']; ?>" disabled>
                     </div>
                     <div class="form-inp">
-                        <label for="username" class="form-label">Email</label>
+                        <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" value="<?php echo $users['email']; ?>" name="email">
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="type" class="col-sm-6 control-label">Select user rights</label>
+                            <div class="col-sm-12 mt-1">
+                                <select name="role" class="form-control" id="role">
+                                    <option value="" selected="selected"><?php echo $users['role']; ?></option>
+                                    <option value="admin">Admin</option>
+                                    <option value="user">User</option>
+                                </select>
+                            </div>
+                    </div>    
                     <div class="item-input-box">
-                        <div class="form-inp">
+                        <div class="form-inp mt-1">
                             <label for="username" class="form-label">Password</label>
                             <input type="password" class="form-control" value="<?php echo $users['password']; ?>" name="password">
                         </div>
@@ -193,7 +204,7 @@
                     </div><br>
                     <button type="submit" name="signup" class="btn-diy-2">Save</button>
                     &nbsp;
-                    <a href="manage-user.html" class="link-txt">Cancel</a>
+                    <a href="manage-user.php" class="link-txt">Cancel</a>
                 </form>
             </div>
             

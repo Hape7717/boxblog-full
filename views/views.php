@@ -46,7 +46,6 @@
     $update_stmt->bindValue(':id_article', $id);
     $update_stmt->execute();
 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -215,7 +214,7 @@ if(!isset($_SESSION['username'])){
 $stmt = $conn->prepare("SELECT * FROM article_comment WHERE id_article = ?");
 $stmt->execute([$id]);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// echo $results['username'];
+
 foreach ($results as $comm) {
     $comm_id = $comm['id_comm'];
 
@@ -226,14 +225,16 @@ foreach ($results as $comm) {
                         <p class="user-txt" style="text-transform: capitalize;"><?php echo $comm['username'];?></p>
                     </div>
                     <?php
-if($comm['username'] === isset($_SESSION['username']) || isset($_SESSION['admin_login'])){
-    echo '
-    <div class="user-name" style="display: flex;">
-    <a data-id="'.$comm_id.'" href="../controller/delete-comment.php?delete='.$comm_id.'" class="link-txt delete-btn">Delete</a>
-    <a href="" class="link-txt">Edit</a>
-    </div>
-    ';
+if (isset($_SESSION['username']) || isset($_SESSION['admin_login'])) {
+    if ($comm['username'] === $_SESSION['username'] || isset($_SESSION['admin_login'])) {
+        echo '
+        <div class="user-name" style="display: flex;">
+        <a data-id="'.$comm_id.'" href="../controller/delete-comment.php?delete='.$comm_id.'" class="link-txt delete-btn">Delete</a>
+        </div>
+        ';
+    }
 }
+
 
 ?>
 <!-- endComment loop for comment -->
